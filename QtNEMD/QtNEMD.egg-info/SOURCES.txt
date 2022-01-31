@@ -1,0 +1,9 @@
+LICENSE
+README.md
+setup.py
+QtNEMD.egg-info/PKG-INFO
+QtNEMD.egg-info/SOURCES.txt
+QtNEMD.egg-info/dependency_links.txt
+QtNEMD.egg-info/requires.txt
+QtNEMD.egg-info/top_level.txt
+test/test_smoketest.py

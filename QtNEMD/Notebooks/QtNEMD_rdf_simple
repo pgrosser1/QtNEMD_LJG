@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import FortranDriver
+md = FortranDriver.MDInterface()
+
+plt.clf() # Comment out for NEMD 
+
+# Setting parameters
+md.npart = 500 # Number of particles
+md.temp = 1.1 # Temperature
+md.eps = 1.0 # WCA epsilon parameter
+md.reduced_density = 0.6 # Density
+
+# Equilibrate 
+md.run(2000)
+
+# Enabling NEMD
+md.toggle_nemd()
+md.fieldstrength = 2.0
+
+# Running NEMD
+md.run(2000)
+
+# Graphing the RDF
+rdf_dict = md.compute_rdf()
+r_array = np.array(rdf_dict['r'])
+rdf_array = np.array(rdf_dict['rdf'])
+plt.plot(r_array,rdf_array,"-r")
+plt.title("g(r) Radial Distribution Function")
+plt.savefig("RDF.png")
+

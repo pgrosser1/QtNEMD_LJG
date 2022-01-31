@@ -1,0 +1,2879 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module TTCF ! in 
+    interface  ! in :TTCF
+        subroutine setup ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine setup
+        subroutine md(kprop,iflag) ! in :TTCF:Walls_SSGK.f
+            threadsafe 
+            integer :: kprop
+            integer :: iflag
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine md
+        subroutine domd ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine domd
+        subroutine fcc ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine fcc
+        subroutine forcecell ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine forcecell
+        subroutine ran1(seed,r) ! in :TTCF:Walls_SSGK.f
+            integer :: seed
+            real(kind=8) :: r
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine ran1
+        subroutine read2 ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine read2
+        subroutine read3 ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine read3
+        subroutine out3 ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine out3
+        subroutine out4 ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine out4
+        subroutine read4 ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine read4
+        subroutine out2 ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine out2
+        subroutine moments ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine moments
+        subroutine vin ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine vin
+        subroutine vout ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine vout
+        subroutine forcenocell ! in :TTCF:Walls_SSGK.f
+            real(kind=8) :: upot
+            real(kind=8) :: uwall
+            real(kind=8) dimension(3,3) :: pt
+            real(kind=8) dimension(3,3) :: ptf
+            integer :: npart
+            integer dimension(3000) :: ikol
+            integer dimension(3000) :: imol
+            integer :: limol
+            integer :: npart2
+            integer :: maxtau
+            integer :: non
+            integer :: nplot
+            integer :: iseed
+            integer :: ngaus
+            integer :: kb
+            integer :: ptau
+            integer :: bins
+            integer :: eqtim
+            integer :: ncyc
+            integer :: ntype
+            integer :: jflag
+            integer :: nprint
+            integer :: latt
+            integer :: taunbins
+            real(kind=8) dimension(3000) :: x
+            real(kind=8) dimension(3000) :: y
+            real(kind=8) dimension(3000) :: z
+            real(kind=8) dimension(3000) :: xeq
+            real(kind=8) dimension(3000) :: yeq
+            real(kind=8) dimension(3000) :: zeq
+            real(kind=8) :: dxd
+            real(kind=8) :: qvol
+            real(kind=8) :: df
+            real(kind=8) dimension(3000) :: x0
+            real(kind=8) dimension(3000) :: y0
+            real(kind=8) dimension(3000) :: z0
+            real(kind=8) dimension(3000) :: px
+            real(kind=8) dimension(3000) :: py
+            real(kind=8) dimension(3000) :: pz
+            real(kind=8) dimension(3000) :: fx
+            real(kind=8) dimension(3000) :: fy
+            real(kind=8) dimension(3000) :: fz
+            real(kind=8) dimension(3000) :: fxf
+            real(kind=8) dimension(3000) :: fyf
+            real(kind=8) dimension(3000) :: fzf
+            real(kind=8) dimension(3000) :: fxw
+            real(kind=8) dimension(3000) :: fyw
+            real(kind=8) dimension(3000) :: fzw
+            real(kind=8) dimension(3000) :: s1
+            real(kind=8) dimension(3000) :: s2
+            real(kind=8) dimension(3000) :: s3
+            real(kind=8) dimension(3000) :: s4
+            real(kind=8) dimension(3000) :: sl
+            real(kind=8) dimension(3000) :: s0l
+            real(kind=8) dimension(3000) :: xsav
+            real(kind=8) dimension(3000) :: ysav
+            real(kind=8) dimension(3000) :: zsav
+            real(kind=8) dimension(3000) :: pxsav
+            real(kind=8) dimension(3000) :: pysav
+            real(kind=8) dimension(3000) :: pzsav
+            real(kind=8) dimension(3000) :: xeqsav
+            real(kind=8) dimension(3000) :: yeqsav
+            real(kind=8) dimension(3000) :: zeqsav
+            real(kind=8) dimension(3000) :: fxsav
+            real(kind=8) dimension(3000) :: fysav
+            real(kind=8) dimension(3000) :: fzsav
+            real(kind=8) dimension(3000) :: fxfsav
+            real(kind=8) dimension(3000) :: fyfsav
+            real(kind=8) dimension(3000) :: fzfsav
+            real(kind=8) dimension(3000) :: fxwsav
+            real(kind=8) dimension(3000) :: fywsav
+            real(kind=8) dimension(3000) :: fzwsav
+            real(kind=8) :: nhsav
+            real(kind=8) :: dxdsav
+            real(kind=8) :: upotsav
+            real(kind=8) :: uwallsav
+            real(kind=8) :: ke2sav
+            real(kind=8) :: alsav
+            real(kind=8) :: albsav
+            real(kind=8) :: tr
+            real(kind=8) :: e0
+            real(kind=8) :: field
+            real(kind=8) :: fe0
+            real(kind=8) :: yzdivx
+            real(kind=8) :: cube
+            real(kind=8) :: cube2
+            real(kind=8) :: cubex
+            real(kind=8) :: cubey
+            real(kind=8) :: cubez
+            real(kind=8) :: cubex2
+            real(kind=8) :: cubey2
+            real(kind=8) :: cubez2
+            real(kind=8) :: rmax
+            real(kind=8) :: shift
+            real(kind=8) :: conser
+            real(kind=8) :: kh
+            real(kind=8) :: kf
+            real(kind=8) :: r0
+            real(kind=8) :: drw
+            real(kind=8) :: drf
+            real(kind=8) :: rcut
+            real(kind=8) :: eps12
+            real(kind=8) :: eps1
+            real(kind=8) :: eps2
+            real(kind=8) :: mix
+            real(kind=8) :: eps_ljg
+            real(kind=8) :: r_ljg
+            real(kind=8) :: dxx
+            real(kind=8) :: dxxdiv
+            real(kind=8) :: delta
+            integer :: iseed1
+            integer dimension(10001) :: kount
+            integer :: nmean
+            integer :: ntauav
+            real(kind=8) dimension(3) :: t0
+            real(kind=8) dimension(10001,22) :: tcf
+            real(kind=8) dimension(3000,3) :: t0v
+            real(kind=8) :: msdx
+            real(kind=8) :: msdy
+            real(kind=8) :: msdz
+            real(kind=8) dimension(10001,22) :: tcf1
+            real(kind=8) dimension(10001,22) :: intcf1
+            real(kind=8) dimension(3) :: t0l
+            real(kind=8) dimension(10001,151,22) :: tcfl
+            real(kind=8) dimension(10001,151,22) :: intcfl
+            real(kind=8) dimension(10001,22) :: intcf
+            real(kind=8) dimension(151) :: dissl
+            real(kind=8) dimension(10001,151,22) :: tcfll
+            real(kind=8) dimension(10001,151,22) :: intcfll
+            real(kind=8) dimension(11) :: mean
+            real(kind=8) dimension(10001,22) :: aver
+            real(kind=8) dimension(151) :: dens1
+            real(kind=8) dimension(151) :: dens2
+            real(kind=8) dimension(10001,151,22) :: averl
+            real(kind=8) dimension(151) :: taudens1
+            real(kind=8) dimension(151) :: taudens2
+            real(kind=8) dimension(10001,151) :: densav1
+            real(kind=8) dimension(10001,151) :: densav2
+            real(kind=8) :: temp
+            real(kind=8) :: tote
+            integer dimension(150) :: rij_hist
+            real :: rbin_inv
+            real(kind=8) dimension(22) :: tauav
+            real(kind=8) dimension(151,22) :: tauavl
+            real(kind=8) :: alph
+            real(kind=8) :: alphb
+            real(kind=8) :: vol
+            real(kind=8) :: volf
+            real(kind=8) :: ke2
+            real(kind=8) :: e00
+            real(kind=8) :: nhalph
+            real(kind=8) dimension(22) :: m0
+            real(kind=8) dimension(22) :: m1
+            real(kind=8) dimension(22) :: m2
+            real(kind=8) dimension(22) :: m3
+            real(kind=8) dimension(22) :: m4
+            real(kind=8) dimension(22) :: m5
+            logical :: do_pressure
+            common /flux/ upot,uwall,pt,ptf
+            common /nopart/ npart,ikol,imol,limol,npart2
+            common /iparm/ maxtau,non,nplot,iseed,ngaus,kb,ptau,bins,eqtim,ncyc,ntype,jflag,nprint,latt,taunbins
+            common /coord/ x,y,z,xeq,yeq,zeq,dxd,qvol,df,x0,y0,z0
+            common /moment/ px,py,pz
+            common /forse/ fx,fy,fz,fxf,fyf,fzf,fxw,fyw,fzw
+            common /switch/ s1,s2,s3,s4,sl,s0l
+            common /xsav/ xsav,ysav,zsav,pxsav,pysav,pzsav,xeqsav,yeqsav,zeqsav,fxsav,fysav,fzsav,fxfsav,fyfsav,fzfsav,fxwsav,fywsav,fzwsav,nhsav,dxdsav,upotsav,uwallsav,ke2sav,alsav,albsav
+            common /inener/ tr,e0
+            common /parm/ field,fe0,yzdivx,cube,cube2,cubex,cubey,cubez,cubex2,cubey2,cubez2,rmax,shift,conser,kh,kf,r0,drw,drf,rcut,eps12,eps1,eps2,mix,eps_ljg,r_ljg,dxx,dxxdiv
+            common /simul/ delta
+            common /irandi/ iseed1
+            common /numav/ kount,nmean,ntauav
+            common /count/ t0,tcf,t0v,msdx,msdy,msdz,tcf1,intcf1,t0l,tcfl,intcfl,intcf,dissl,tcfll,intcfll
+            common /averg/ mean,aver,dens1,dens2,averl,taudens1,taudens2,densav1,densav2,temp,tote,rij_hist,rbin_inv
+            common /tauav/ tauav,tauavl
+            common /props/ alph,alphb,vol,volf,ke2,e00,nhalph
+            common /mom/ m0,m1,m2,m3,m4,m5
+            common /ioflags/ do_pressure
+        end subroutine forcenocell
+    end interface 
+end python module TTCF
+
+! This file was auto-generated with f2py (version:1.20.3).
+! See http://cens.ioc.ee/projects/f2py2e/

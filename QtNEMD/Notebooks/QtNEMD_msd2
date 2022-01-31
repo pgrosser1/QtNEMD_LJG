@@ -1,0 +1,42 @@
+import TTCF
+import FortranDriver
+import numpy as np
+import matplotlib.pyplot as plt
+
+md = FortranDriver.MDInterface()
+
+# Parameters
+md.npart = 500 # Number of particles
+md.temp = 1.0 # Temperature
+md.eps = 1.0 # WCA epsilon parameter
+md.reduced_density = 0.6 # Density
+
+# Equilibriate
+md.run(2000)
+
+# Enable NEMD
+md.toggle_nemd()
+md.fieldstrength = 2.0
+
+# Now reset the stored initial values of X, Y and Z 
+TTCF.coord.x0 = TTCF.coord.x
+TTCF.coord.y0 = TTCF.coord.y
+TTCF.coord.z0 = TTCF.coord.z
+
+# Run the code for N steps in increments of 10 so we can save the MSD
+N_steps = 2000
+N_iter = int(N_steps/10)
+msd_timeseries = np.zeros((3, N_iter), dtype=np.float64)
+times = np.zeros(N_iter, dtype=np.float64)
+for i in range(N_iter):
+    md.run(10)
+    msdx, msdy, msdz = md.compute_msd()
+    msd_timeseries[0, i] = msdx
+    msd_timeseries[1, i] = msdy 
+    msd_timeseries[2, i] = msdz 
+
+    times[i] = i*10*TTCF.simul.delta
+
+plt.plot(times, msd_timeseries[0, :], "-r")
+plt.title("Mean squared displacement")
+plt.show()
